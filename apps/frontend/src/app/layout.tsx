@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Noto_Sans_Thai } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
+import { PageTransition } from '@/components/page-transition';
 import './globals.css';
 
 const notoSansThai = Noto_Sans_Thai({
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${notoSansThai.variable} ${inter.variable} font-sans antialiased`}
       >
-        {children}
+        <PageTransition>{children}</PageTransition>
         <Toaster position="top-right" />
       </body>
     </html>
