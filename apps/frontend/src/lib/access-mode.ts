@@ -22,8 +22,8 @@ export const clearAccessMode = (): void => {
 };
 
 /** Redirect path after successful login, based on selected access mode */
-export const getPostLoginPath = (mode: AccessMode): string => {
-  return mode === 'ADMIN' ? '/dashboard' : '/concerts';
+export const getPostLoginPath = (): string => {
+  return '/home';
 };
 
 /** Role sent on sign-up, derived from landing page selection */
@@ -31,10 +31,7 @@ export const getSignupRole = (mode: AccessMode): UserRole => {
   return mode;
 };
 
-export const getPostLoginPathFromStorage = (): string => {
-  const mode = getAccessMode();
-  return mode ? getPostLoginPath(mode) : '/concerts';
-};
+export const getPostLoginPathFromStorage = (): string => getPostLoginPath();
 
 export const getSignupRoleFromStorage = (): UserRole => {
   const mode = getAccessMode();

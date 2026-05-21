@@ -1,8 +1,16 @@
 'use client';
 
 import { User } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getAccessMode } from '@/lib/access-mode';
+import toast from 'react-hot-toast';
+import {
+  getAccessMode,
+  getPostLoginPathFromStorage,
+  setAccessMode,
+} from '@/lib/access-mode';
+import { MOCK_PASSWORD } from '@/lib/mock-data';
+import { setToken } from '@/lib/auth';
 import type { AccessMode } from '@/types/access-mode';
 import { AuthActionButton } from '../auth-action-button';
 import { AuthFooterLink } from '../auth-footer-link';
@@ -16,10 +24,17 @@ const LOGIN_BUTTON_LABELS: Record<AccessMode, string> = {
 };
 
 export const LoginForm = () => {
-  const [accessMode, setAccessMode] = useState<AccessMode | null>(null);
+  const router = useRouter();
+  const [accessMode, setAccessModeState] = useState<AccessMode | null>(null);
 
   useEffect(() => {
-    setAccessMode(getAccessMode());
+    const mode = getAccessMode();
+    if (mode) {
+      setAccessModeState(mode);
+    } else {
+      setAccessMode('USER');
+      setAccessModeState('USER');
+    }
   }, []);
 
   const buttonLabel = accessMode
@@ -28,7 +43,25 @@ export const LoginForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: call login API, then redirect via getPostLoginPathFromStorage()
+    const formData = new FormData(e.currentTarget);
+    const username = (formData.get('username') as string)?.trim();
+    const password = formData.get('password') as string;
+
+    if (password !== MOCK_PASSWORD) {
+      toast.error('Invalid credentials. Use password: admin');
+      return;
+    }
+
+    if (!username) {
+      toast.error('Please enter your username');
+      return;
+    }
+
+    const mode = getAccessMode() ?? 'USER';
+    setAccessMode(mode);
+    setToken('mock-auth-token');
+    toast.success('Login successfully');
+    router.push(getPostLoginPathFromStorage());
   };
 
   return (
@@ -37,11 +70,12 @@ export const LoginForm = () => {
 
       <form onSubmit={handleSubmit} className="mt-10 space-y-6">
         <AuthTextField
-          label="Email"
-          type="email"
-          name="email"
-          autoComplete="email"
-          placeholder="Enter your Email Address"
+          label="Username"
+          type="text"
+          name="username"
+          autoComplete="username"
+          placeholder="admin"
+          defaultValue="admin"
           required
           icon={<User className="h-5 w-5" strokeWidth={1.5} />}
         />

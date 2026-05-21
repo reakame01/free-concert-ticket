@@ -21,6 +21,7 @@ Full-stack concert ticket booking application using **Next.js** (frontend) + **N
 ├── apps/
 │   ├── frontend/          ← Next.js 14 App Router
 │   └── backend/           ← NestJS
+├── package.json           ← root scripts (dev ทั้ง FE + BE)
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
@@ -42,23 +43,37 @@ cp .env.example .env
 cp apps/frontend/.env.local.example apps/frontend/.env.local
 ```
 
-2. Start the full stack with Docker:
+2. Install dependencies (ครั้งแรก):
+
+```bash
+npm install
+npm run install:all
+```
+
+3. **Dev แบบเร็ว (แนะนำ)** — รัน FE + BE พร้อมกันที่ root:
+
+```bash
+npm run dev:full
+```
+
+หรือแยกขั้นตอน:
+
+```bash
+npm run dev:db    # PostgreSQL เท่านั้น
+npm run dev       # Frontend :3000 + Backend :3001
+```
+
+4. หรือใช้ Docker ทั้ง stack:
 
 ```bash
 docker-compose up
 ```
 
-3. Or run services individually:
+5. หรือรันแยกโฟลเดอร์ (debug ทีละส่วน):
 
 ```bash
-# Start PostgreSQL only
-docker-compose up postgres -d
-
-# Backend (port 3001)
-cd apps/backend && npm install && npm run start:dev
-
-# Frontend (port 3000)
-cd apps/frontend && npm install && npm run dev
+cd apps/backend && npm run start:dev
+cd apps/frontend && npm run dev
 ```
 
 ### URLs
@@ -70,6 +85,17 @@ cd apps/frontend && npm install && npm run dev
 | Swagger Docs | http://localhost:3001/api/docs |
 
 ## Development Scripts
+
+### Root (รันที่โฟลเดอร์โปรเจกต์)
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Frontend + Backend พร้อมกัน |
+| `npm run dev:db` | Start PostgreSQL (Docker) |
+| `npm run dev:full` | DB + Frontend + Backend |
+| `npm run install:all` | `npm install` ใน frontend และ backend |
+| `npm run build` | Build ทั้งสอง apps |
+| `npm run docker:up` | `docker-compose up` |
 
 ### Backend (`apps/backend`)
 
