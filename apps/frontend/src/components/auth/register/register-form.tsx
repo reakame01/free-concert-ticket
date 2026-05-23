@@ -1,10 +1,20 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useForm, type SubmitErrorHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useI18n } from '@/context/i18n-provider';
+import { register as registerApi } from '@/lib/api/auth';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { getSignupRoleFromStorage } from '@/lib/access-mode';
+import { getFirstFieldError } from '@/lib/form-errors';
+import {
+  createRegisterSchema,
+  type RegisterFormValues,
+} from '@/lib/schemas/auth';
 import { SuccessDialog } from '@/components/ui/success-dialog';
 import { AuthActionButton } from '../auth-action-button';
 import { AuthFooterLink } from '../auth-footer-link';
@@ -14,21 +24,48 @@ import { AuthTextField } from '../auth-text-field';
 
 export const RegisterForm = () => {
   const router = useRouter();
+  const { t, locale, messages } = useI18n();
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const password = formData.get('password') as string;
-    const confirmPassword = formData.get('confirmPassword') as string;
+  const registerSchema = useMemo(
+    () => createRegisterSchema(messages.validation.register),
+    [messages],
+  );
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
+
+  const onSubmit = async (values: RegisterFormValues) => {
+    try {
+      await registerApi(
+        values.username,
+        values.password,
+        getSignupRoleFromStorage(),
+      );
+      setShowSuccess(true);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, t('toast.registerFailed')));
     }
+  };
 
-    void getSignupRoleFromStorage();
-    setShowSuccess(true);
+  const onInvalid: SubmitErrorHandler<RegisterFormValues> = (fieldErrors) => {
+    const message = getFirstFieldError(
+      fieldErrors,
+      t('validation.invalidInput'),
+    );
+    if (message) {
+      toast.error(message);
+    }
   };
 
   const handleSuccessClose = () => {
@@ -39,57 +76,64 @@ export const RegisterForm = () => {
   return (
     <>
       <div className="w-full max-w-md">
-        <AuthFormHeading title="Sign Up" />
+        <AuthFormHeading title={t('auth.register.title')} />
 
-        <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+        <form
+          key={locale}
+          onSubmit={handleSubmit(onSubmit, onInvalid)}
+          className="mt-10 space-y-6"
+          noValidate
+        >
           <AuthTextField
-            label="Full name"
+            label={t('auth.register.username')}
             type="text"
-            name="fullName"
-            autoComplete="name"
-            placeholder="Enter your Full Name"
-            required
+            autoComplete="username"
+            placeholder={t('auth.register.placeholderUsername')}
+            disabled={isSubmitting}
             icon={<User className="h-5 w-5" strokeWidth={1.5} />}
-          />
-
-          <AuthTextField
-            label="Email"
-            type="email"
-            name="email"
-            autoComplete="email"
-            placeholder="Enter your Email Address"
-            required
-            icon={<User className="h-5 w-5" strokeWidth={1.5} />}
+            error={errors.username?.message}
+            {...register('username')}
           />
 
           <AuthPasswordField
-            label="Password"
-            name="password"
-            placeholder="Create a Password"
+            label={t('auth.register.password')}
             autoComplete="new-password"
+            placeholder={t('auth.register.placeholderPassword')}
+            disabled={isSubmitting}
+            error={errors.password?.message}
+            {...register('password')}
           />
 
           <AuthPasswordField
-            label="Confirm Password"
-            name="confirmPassword"
-            placeholder="Confirm your Password"
+            label={t('auth.register.confirmPassword')}
             autoComplete="new-password"
+            placeholder={t('auth.register.placeholderConfirmPassword')}
+            disabled={isSubmitting}
+            error={errors.confirmPassword?.message}
+            {...register('confirmPassword')}
           />
 
-          <AuthActionButton label="Create an account" />
+          <AuthActionButton
+            label={
+              isSubmitting
+                ? t('auth.register.creating')
+                : t('auth.register.submit')
+            }
+            disabled={isSubmitting}
+          />
         </form>
 
         <AuthFooterLink
-          message="Already have an account?"
-          linkText="Login"
+          message={t('auth.register.hasAccount')}
+          linkText={t('auth.register.loginLink')}
           href="/login"
         />
       </div>
 
       <SuccessDialog
         open={showSuccess}
-        title="Registration successful"
-        message="Your account has been registered successfully. Please log in to continue."
+        title={t('auth.register.successTitle')}
+        message={t('auth.register.successMessage')}
         onClose={handleSuccessClose}
       />
     </>

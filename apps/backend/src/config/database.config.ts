@@ -1,6 +1,12 @@
+import { config as loadEnv } from 'dotenv';
+import { resolve } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
+
+// TypeORM CLI does not use Nest ConfigModule — load .env explicitly for migrations.
+loadEnv({ path: resolve(__dirname, '../../../../.env') });
+loadEnv({ path: resolve(__dirname, '../../../.env') });
 
 export const getDatabaseConfig = (
   configService: ConfigService,

@@ -1,6 +1,7 @@
 'use client';
 
 import { Check } from 'lucide-react';
+import { useI18n } from '@/context/i18n-provider';
 
 interface SuccessDialogProps {
   open: boolean;
@@ -15,6 +16,8 @@ export const SuccessDialog = ({
   message,
   onClose,
 }: SuccessDialogProps) => {
+  const { t } = useI18n();
+
   if (!open) return null;
 
   return (
@@ -34,7 +37,7 @@ export const SuccessDialog = ({
           onClick={onClose}
           className="mt-8 w-full rounded-lg bg-accent py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
         >
-          OK
+          {t('common.ok')}
         </button>
       </div>
     </div>

@@ -1,15 +1,24 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm, type SubmitErrorHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useI18n } from '@/context/i18n-provider';
+import { login } from '@/lib/api/auth';
+import { getApiErrorMessage } from '@/lib/api-error';
 import {
   getAccessMode,
   getPostLoginPathFromStorage,
   setAccessMode,
 } from '@/lib/access-mode';
-import { MOCK_PASSWORD } from '@/lib/mock-data';
+import { getFirstFieldError } from '@/lib/form-errors';
+import {
+  createLoginSchema,
+  type LoginFormValues,
+} from '@/lib/schemas/auth';
 import { setToken } from '@/lib/auth';
 import type { AccessMode } from '@/types/access-mode';
 import { AuthActionButton } from '../auth-action-button';
@@ -18,14 +27,27 @@ import { AuthFormHeading } from '../auth-form-heading';
 import { AuthPasswordField } from '../auth-password-field';
 import { AuthTextField } from '../auth-text-field';
 
-const LOGIN_BUTTON_LABELS: Record<AccessMode, string> = {
-  USER: 'Login as User',
-  ADMIN: 'Login as Administrator',
-};
-
 export const LoginForm = () => {
   const router = useRouter();
+  const { t, locale, messages } = useI18n();
   const [accessMode, setAccessModeState] = useState<AccessMode | null>(null);
+
+  const loginSchema = useMemo(
+    () => createLoginSchema(messages.validation.login),
+    [messages],
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: 'admin',
+      password: 'admin',
+    },
+  });
 
   useEffect(() => {
     const mode = getAccessMode();
@@ -38,61 +60,78 @@ export const LoginForm = () => {
   }, []);
 
   const buttonLabel = accessMode
-    ? LOGIN_BUTTON_LABELS[accessMode]
-    : 'Login';
+    ? accessMode === 'ADMIN'
+      ? t('auth.login.loginAsAdmin')
+      : t('auth.login.loginAsUser')
+    : t('auth.login.login');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const username = (formData.get('username') as string)?.trim();
-    const password = formData.get('password') as string;
-
-    if (password !== MOCK_PASSWORD) {
-      toast.error('Invalid credentials. Use password: admin');
-      return;
-    }
-
-    if (!username) {
-      toast.error('Please enter your username');
-      return;
-    }
-
+  const onSubmit = async (values: LoginFormValues) => {
     const mode = getAccessMode() ?? 'USER';
-    setAccessMode(mode);
-    setToken('mock-auth-token');
-    toast.success('Login successfully');
-    router.push(getPostLoginPathFromStorage());
+
+    try {
+      const { accessToken } = await login(
+        values.username,
+        values.password,
+        mode,
+      );
+      setAccessMode(mode);
+      setToken(accessToken);
+      toast.success(t('toast.loginSuccess'));
+      router.push(getPostLoginPathFromStorage());
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, t('toast.loginFailed')));
+    }
+  };
+
+  const onInvalid: SubmitErrorHandler<LoginFormValues> = (fieldErrors) => {
+    const message = getFirstFieldError(
+      fieldErrors,
+      t('validation.invalidInput'),
+    );
+    if (message) {
+      toast.error(message);
+    }
   };
 
   return (
     <div className="w-full max-w-md">
-      <AuthFormHeading title="Login" />
+      <AuthFormHeading title={t('auth.login.title')} />
 
-      <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+      <form
+        key={locale}
+        onSubmit={handleSubmit(onSubmit, onInvalid)}
+        className="mt-10 space-y-6"
+        noValidate
+      >
         <AuthTextField
-          label="Username"
+          label={t('auth.login.username')}
           type="text"
-          name="username"
           autoComplete="username"
-          placeholder="admin"
-          defaultValue="admin"
-          required
+          placeholder={t('auth.login.placeholderUsername')}
+          disabled={isSubmitting}
           icon={<User className="h-5 w-5" strokeWidth={1.5} />}
+          error={errors.username?.message}
+          {...register('username')}
         />
 
         <AuthPasswordField
-          label="Password"
-          name="password"
-          placeholder="Enter your Password"
+          label={t('auth.login.password')}
           autoComplete="current-password"
+          placeholder={t('auth.login.placeholderPassword')}
+          disabled={isSubmitting}
+          error={errors.password?.message}
+          {...register('password')}
         />
 
-        <AuthActionButton label={buttonLabel} />
+        <AuthActionButton
+          label={isSubmitting ? t('auth.login.loggingIn') : buttonLabel}
+          disabled={isSubmitting}
+        />
       </form>
 
       <AuthFooterLink
-        message="Don't have an account?"
-        linkText="Create an account"
+        message={t('auth.login.noAccount')}
+        linkText={t('auth.login.createAccount')}
         href="/register"
       />
     </div>

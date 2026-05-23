@@ -7,9 +7,10 @@ interface ConfirmDialogProps {
   open: boolean;
   title: string;
   message: ReactNode;
-  confirmLabel: string;
+  confirmLabel: ReactNode;
   cancelLabel?: string;
   variant?: 'danger' | 'primary';
+  confirmDisabled?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -21,6 +22,7 @@ export const ConfirmDialog = ({
   confirmLabel,
   cancelLabel = 'Cancel',
   variant = 'danger',
+  confirmDisabled = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) => {
@@ -53,14 +55,16 @@ export const ConfirmDialog = ({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-gray-300 bg-white py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            disabled={confirmDisabled}
+            className="flex-1 rounded-lg border border-gray-300 bg-white py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className={`flex-1 rounded-lg py-3 text-sm font-semibold transition-colors ${confirmClassName}`}
+            disabled={confirmDisabled}
+            className={`flex-1 rounded-lg py-3 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${confirmClassName}`}
           >
             {confirmLabel}
           </button>

@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConcertsModule } from './concerts/concerts.module';
 import { getDatabaseConfig } from './config/database.config';
+import { HistoryModule } from './history/history.module';
 import { ReservationsModule } from './reservations/reservations.module';
 import { UsersModule } from './users/users.module';
 
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     ConcertsModule,
     ReservationsModule,
+    HistoryModule,
   ],
 })
 export class AppModule {}

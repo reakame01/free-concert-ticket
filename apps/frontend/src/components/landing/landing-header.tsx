@@ -1,4 +1,10 @@
+'use client';
+
+import { useI18n } from '@/context/i18n-provider';
+
 export const LandingHeader = () => {
+  const { t } = useI18n();
+
   return (
     <header className="flex items-center gap-3 px-4 py-4 sm:px-8 lg:px-12">
       <div
@@ -6,7 +12,7 @@ export const LandingHeader = () => {
         aria-hidden="true"
       />
       <span className="text-xl font-bold tracking-tight text-brand sm:text-2xl">
-        Free Tick
+        {t('common.brand')}
       </span>
     </header>
   );

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { AppStoreProvider } from '@/context/app-store';
 import { getAccessMode, setAccessMode } from '@/lib/access-mode';
 import { isAuthenticated } from '@/lib/auth';
+import { AccessGuard } from './access-guard';
 import { SideNav } from './side-nav';
 
 interface AppShellProps {
@@ -33,7 +34,7 @@ const AppShellInner = ({ children }: AppShellProps) => {
     <div className="min-h-screen bg-[#F5F5F5]">
       <SideNav />
       <main className="ml-56 h-screen overflow-y-auto p-6 lg:ml-64 lg:p-8">
-        {children}
+        <AccessGuard>{children}</AccessGuard>
       </main>
     </div>
   );

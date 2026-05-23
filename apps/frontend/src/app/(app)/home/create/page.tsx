@@ -9,15 +9,15 @@ import { useAppStore } from '@/context/app-store';
 
 export default function HomeCreatePage() {
   const router = useRouter();
-  const { accessMode } = useAppStore();
+  const { accessMode, isRoleReady } = useAppStore();
 
   useEffect(() => {
-    if (accessMode === 'USER') {
+    if (isRoleReady && accessMode === 'USER') {
       router.replace('/home');
     }
-  }, [accessMode, router]);
+  }, [isRoleReady, accessMode, router]);
 
-  if (accessMode === 'USER') {
+  if (!isRoleReady || accessMode === 'USER') {
     return null;
   }
 

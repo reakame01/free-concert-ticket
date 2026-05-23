@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useI18n } from '@/context/i18n-provider';
 
 export const AdminHomeTabs = () => {
   const pathname = usePathname();
+  const { t } = useI18n();
   const isCreate = pathname === '/home/create';
 
   return (
@@ -17,7 +19,7 @@ export const AdminHomeTabs = () => {
             : 'text-gray-500 hover:text-gray-700'
         }`}
       >
-        Overview
+        {t('adminTabs.overview')}
       </Link>
       <Link
         href="/home/create"
@@ -27,7 +29,7 @@ export const AdminHomeTabs = () => {
             : 'text-gray-500 hover:text-gray-700'
         }`}
       >
-        Create
+        {t('adminTabs.create')}
       </Link>
     </div>
   );

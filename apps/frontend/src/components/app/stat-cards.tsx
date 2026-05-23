@@ -3,6 +3,7 @@
 import { Award, User, XCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useAppStore } from '@/context/app-store';
+import { useI18n } from '@/context/i18n-provider';
 
 interface StatCardProps {
   label: string;
@@ -28,23 +29,24 @@ const StatCard = ({ label, value, bgColor, icon }: StatCardProps) => {
 
 export const StatCards = () => {
   const { totalSeats, totalReserved, totalCancelled } = useAppStore();
+  const { t } = useI18n();
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
       <StatCard
-        label="Total of seats"
+        label={t('stats.totalSeats')}
         value={totalSeats}
         bgColor="#0070A4"
         icon={<User className="h-14 w-14 sm:h-16 sm:w-16" strokeWidth={1.5} />}
       />
       <StatCard
-        label="Reserve"
+        label={t('stats.reserve')}
         value={totalReserved}
         bgColor="#00A58B"
         icon={<Award className="h-14 w-14 sm:h-16 sm:w-16" strokeWidth={1.5} />}
       />
       <StatCard
-        label="Cancel"
+        label={t('stats.cancel')}
         value={totalCancelled}
         bgColor="#F96464"
         icon={<XCircle className="h-14 w-14 sm:h-16 sm:w-16" strokeWidth={1.5} />}

@@ -8,37 +8,43 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { useAppStore } from '@/context/app-store';
+import { useI18n } from '@/context/i18n-provider';
 import { clearAccessMode } from '@/lib/access-mode';
 import { clearToken } from '@/lib/auth';
 import type { AccessMode } from '@/types/access-mode';
 
 interface NavItem {
-  label: string;
+  labelKey: 'nav.home' | 'nav.history';
   href: string;
   icon: React.ReactNode;
   roles: AccessMode[];
 }
 
-const NAV_ITEMS: NavItem[] = [
-  {
-    label: 'Home',
-    href: '/home',
-    icon: <Home className="h-5 w-5" strokeWidth={1.5} />,
-    roles: ['ADMIN', 'USER'],
-  },
-  {
-    label: 'History',
-    href: '/history',
-    icon: <Clock className="h-5 w-5" strokeWidth={1.5} />,
-    roles: ['ADMIN'],
-  },
-];
-
 export const SideNav = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { accessMode, switchRole } = useAppStore();
+  const { t } = useI18n();
+
+  const navItems = useMemo<NavItem[]>(
+    () => [
+      {
+        labelKey: 'nav.home',
+        href: '/home',
+        icon: <Home className="h-5 w-5" strokeWidth={1.5} />,
+        roles: ['ADMIN', 'USER'],
+      },
+      {
+        labelKey: 'nav.history',
+        href: '/history',
+        icon: <Clock className="h-5 w-5" strokeWidth={1.5} />,
+        roles: ['ADMIN'],
+      },
+    ],
+    [],
+  );
 
   const handleLogout = () => {
     clearToken();
@@ -54,9 +60,11 @@ export const SideNav = () => {
   };
 
   const switchLabel =
-    accessMode === 'ADMIN' ? 'Switch to user' : 'Switch to Admin';
+    accessMode === 'ADMIN'
+      ? t('nav.switchToUser')
+      : t('nav.switchToAdmin');
 
-  const visibleItems = NAV_ITEMS.filter((item) =>
+  const visibleItems = navItems.filter((item) =>
     item.roles.includes(accessMode),
   );
 
@@ -71,7 +79,7 @@ export const SideNav = () => {
     <aside className="fixed left-0 top-0 z-30 flex h-screen w-56 flex-col border-r border-gray-200 bg-white lg:w-64">
       <div className="border-b border-gray-100 px-6 py-8">
         <h1 className="text-3xl font-bold text-gray-900">
-          {accessMode === 'ADMIN' ? 'Admin' : 'User'}
+          {accessMode === 'ADMIN' ? t('nav.admin') : t('nav.user')}
         </h1>
       </div>
 
@@ -89,7 +97,7 @@ export const SideNav = () => {
               }`}
             >
               {item.icon}
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           );
         })}
@@ -111,7 +119,7 @@ export const SideNav = () => {
           className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
         >
           <LogOut className="h-5 w-5" strokeWidth={1.5} />
-          Logout
+          {t('nav.logout')}
         </button>
       </div>
     </aside>

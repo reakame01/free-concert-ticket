@@ -103,9 +103,18 @@ cd apps/frontend && npm run dev
 |---|---|
 | `npm run start:dev` | Start in watch mode |
 | `npm run build` | Build for production |
+| `npm run migration:run` | Run pending migrations (required before first API use) |
 | `npm run migration:generate` | Generate a new migration |
-| `npm run migration:run` | Run pending migrations |
 | `npm run test` | Run Jest tests |
+
+**First-time DB setup** (with Postgres running via `npm run dev:db`):
+
+```bash
+cd apps/backend
+npm run migration:run
+```
+
+Default admin seed: `admin` / `admin`
 
 ### Frontend (`apps/frontend`)
 

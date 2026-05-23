@@ -1,9 +1,21 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { AdminHomeTabs } from '@/components/app/admin-home-tabs';
-import { ConcertOverviewList } from '@/components/app/concert-overview-list';
+import { ConcertListSkeleton } from '@/components/app/concert-list-skeleton';
 import { StatCards } from '@/components/app/stat-cards';
 import { useAppStore } from '@/context/app-store';
+
+const ConcertOverviewList = dynamic(
+  () =>
+    import('@/components/app/concert-overview-list').then(
+      (mod) => mod.ConcertOverviewList,
+    ),
+  {
+    loading: () => <ConcertListSkeleton />,
+    ssr: false,
+  },
+);
 
 export default function HomePage() {
   const { accessMode } = useAppStore();
@@ -19,4 +31,4 @@ export default function HomePage() {
       <ConcertOverviewList mode="admin" />
     </>
   );
-}
+};

@@ -1,32 +1,34 @@
 'use client';
 
 import { Eye, EyeOff, Lock } from 'lucide-react';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
+import type { InputHTMLAttributes } from 'react';
 import { AuthTextField } from './auth-text-field';
 
-interface AuthPasswordFieldProps {
+interface AuthPasswordFieldProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: string;
-  name: string;
-  placeholder: string;
-  autoComplete?: string;
+  error?: string;
 }
 
-export const AuthPasswordField = ({
-  label,
-  name,
-  placeholder,
-  autoComplete,
-}: AuthPasswordFieldProps) => {
+export const AuthPasswordField = forwardRef<
+  HTMLInputElement,
+  AuthPasswordFieldProps
+>(function AuthPasswordField(
+  { label, error, disabled, placeholder, autoComplete, ...inputProps },
+  ref,
+) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <AuthTextField
+      ref={ref}
       label={label}
       type={showPassword ? 'text' : 'password'}
-      name={name}
       autoComplete={autoComplete}
       placeholder={placeholder}
-      required
+      disabled={disabled}
+      error={error}
       icon={<Lock className="h-5 w-5" strokeWidth={1.5} />}
       trailing={
         <button
@@ -42,6 +44,9 @@ export const AuthPasswordField = ({
           )}
         </button>
       }
+      {...inputProps}
     />
   );
-};
+});
+
+AuthPasswordField.displayName = 'AuthPasswordField';

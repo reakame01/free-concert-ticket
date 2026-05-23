@@ -1,9 +1,11 @@
 'use client';
 
-import { Trash2, User } from 'lucide-react';
+import { Loader2, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppStore } from '@/context/app-store';
+import { useI18n } from '@/context/i18n-provider';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import type { Concert } from '@/types/concert';
 import type { ConcertCardAction } from '@/types/concert';
@@ -16,58 +18,56 @@ interface ConcertCardProps {
 export const ConcertCard = ({ concert, mode }: ConcertCardProps) => {
   const { deleteConcert, reserveConcert, cancelReservation, isUserReserved } =
     useAppStore();
+  const { t } = useI18n();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<ConcertCardAction | null>(
     null,
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isReserved = isUserReserved(concert.id);
 
   const openConfirm = (action: ConcertCardAction) => {
+    if (isSubmitting) return;
     setPendingAction(action);
     setDialogOpen(true);
   };
 
-  const handleConfirm = () => {
-    if (!pendingAction) return;
+  const handleConfirm = async () => {
+    if (!pendingAction || isSubmitting) return;
 
-    if (pendingAction === 'delete') {
-      deleteConcert(concert.id);
-      toast.success('Delete successfully');
-    } else if (pendingAction === 'reserve') {
-      reserveConcert(concert.id, 'Sara John');
-      toast.success('Reserve successfully');
-    } else if (pendingAction === 'cancel') {
-      cancelReservation(concert.id, 'Sara John');
-      toast.success('Cancel successfully');
+    setIsSubmitting(true);
+    try {
+      if (pendingAction === 'delete') {
+        await deleteConcert(concert.id);
+        toast.success(t('toast.deleteSuccess'));
+      } else if (pendingAction === 'reserve') {
+        await reserveConcert(concert.id);
+        toast.success(t('toast.reserveSuccess'));
+      } else if (pendingAction === 'cancel') {
+        await cancelReservation(concert.id);
+        toast.success(t('toast.cancelSuccess'));
+      }
+      setDialogOpen(false);
+      setPendingAction(null);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, t('toast.actionFailed')));
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setDialogOpen(false);
-    setPendingAction(null);
   };
 
   const dialogContent = () => {
-    if (pendingAction === 'delete') {
-      return (
-        <>
-          Are you sure to delete? &apos;
-          <span className="font-semibold text-gray-900">{concert.name}</span>
-          &apos;
-        </>
-      );
-    }
-    if (pendingAction === 'reserve') {
-      return (
-        <>
-          Are you sure to reserve? &apos;
-          <span className="font-semibold text-gray-900">{concert.name}</span>
-          &apos;
-        </>
-      );
-    }
+    const prefix =
+      pendingAction === 'delete'
+        ? t('concert.confirmDelete')
+        : pendingAction === 'reserve'
+          ? t('concert.confirmReserve')
+          : t('concert.confirmCancel');
+
     return (
       <>
-        Are you sure to cancel? &apos;
+        {prefix} &apos;
         <span className="font-semibold text-gray-900">{concert.name}</span>
         &apos;
       </>
@@ -75,7 +75,11 @@ export const ConcertCard = ({ concert, mode }: ConcertCardProps) => {
   };
 
   const confirmLabel =
-    pendingAction === 'delete' ? 'Yes, Delete' : 'Yes, Confirm';
+    pendingAction === 'delete'
+      ? t('common.yesDelete')
+      : t('common.yesConfirm');
+
+  const actionButtonDisabled = isSubmitting;
 
   return (
     <>
@@ -97,26 +101,29 @@ export const ConcertCard = ({ concert, mode }: ConcertCardProps) => {
             <button
               type="button"
               onClick={() => openConfirm('delete')}
-              className="flex items-center gap-2 rounded-lg bg-red-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-600"
+              disabled={actionButtonDisabled}
+              className="flex items-center gap-2 rounded-lg bg-red-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Trash2 className="h-4 w-4" />
-              Delete
+              {t('concert.delete')}
             </button>
           ) : isReserved ? (
             <button
               type="button"
               onClick={() => openConfirm('cancel')}
-              className="rounded-lg bg-red-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-600"
+              disabled={actionButtonDisabled}
+              className="rounded-lg bg-red-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Cancel
+              {t('concert.cancel')}
             </button>
           ) : (
             <button
               type="button"
               onClick={() => openConfirm('reserve')}
-              className="rounded-lg bg-[#2196F3] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
+              disabled={actionButtonDisabled}
+              className="rounded-lg bg-[#2196F3] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Reserve
+              {t('concert.reserve')}
             </button>
           )}
         </div>
@@ -124,11 +131,23 @@ export const ConcertCard = ({ concert, mode }: ConcertCardProps) => {
 
       <ConfirmDialog
         open={dialogOpen}
-        title="Confirmation"
+        title={t('common.confirmation')}
         message={dialogContent()}
-        confirmLabel={confirmLabel}
-        onConfirm={handleConfirm}
+        confirmLabel={
+          isSubmitting ? (
+            <span className="inline-flex items-center justify-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {t('common.processing')}
+            </span>
+          ) : (
+            confirmLabel
+          )
+        }
+        cancelLabel={t('common.cancel')}
+        confirmDisabled={isSubmitting}
+        onConfirm={() => void handleConfirm()}
         onCancel={() => {
+          if (isSubmitting) return;
           setDialogOpen(false);
           setPendingAction(null);
         }}
