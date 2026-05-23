@@ -10,8 +10,8 @@ import { HistoryAction } from '@/common/enums/history-action.enum';
 import { ReservationStatus } from '@/common/enums/reservation-status.enum';
 import { Concert } from '@/concerts/entities/concert.entity';
 import { HistoryService } from '@/history/history.service';
-import { Reservation } from './entities/reservation.entity';
-import { ReservationsService } from './reservations.service';
+import { Reservation } from '@/reservations/entities/reservation.entity';
+import { ReservationsService } from '@/reservations/reservations.service';
 
 describe('ReservationsService', () => {
   let service: ReservationsService;

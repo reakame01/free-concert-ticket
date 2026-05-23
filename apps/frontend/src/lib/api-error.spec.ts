@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { describe, expect, it } from 'vitest';
-import { getApiErrorMessage, isAdminForbiddenError } from './api-error';
+import { getApiErrorMessage, isAdminForbiddenError } from '@/lib/api-error';
 
 describe('getApiErrorMessage', () => {
   it('returns fallback for null error', () => {

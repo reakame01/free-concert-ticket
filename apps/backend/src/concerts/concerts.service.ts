@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { HistoryAction } from '@/common/enums/history-action.enum';
 import { HistoryService } from '@/history/history.service';
-import { Concert } from './entities/concert.entity';
-import { CreateConcertDto } from './dto/create-concert.dto';
+import { Concert } from '@/concerts/entities/concert.entity';
+import { CreateConcertDto } from '@/concerts/dto/create-concert.dto';
 import {
   ConcertResponseDto,
   ConcertStatsResponseDto,
-} from './dto/concert-response.dto';
-import { PaginatedConcertsResponseDto } from './dto/paginated-concerts-response.dto';
+} from '@/concerts/dto/concert-response.dto';
+import { PaginatedConcertsResponseDto } from '@/concerts/dto/paginated-concerts-response.dto';
 
 @Injectable()
 export class ConcertsService {

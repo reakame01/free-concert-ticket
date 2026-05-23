@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { HistoryAction } from '@/common/enums/history-action.enum';
-import { HistoryLog } from './entities/history-log.entity';
-import { HistoryService } from './history.service';
+import { HistoryLog } from '@/history/entities/history-log.entity';
+import { HistoryService } from '@/history/history.service';
 
 describe('HistoryService', () => {
   let service: HistoryService;

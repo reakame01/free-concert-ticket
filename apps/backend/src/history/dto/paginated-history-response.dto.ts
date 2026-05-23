@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HistoryResponseDto } from './history-response.dto';
+import { HistoryResponseDto } from '@/history/dto/history-response.dto';
 
 export class PaginatedHistoryResponseDto {
   @ApiProperty({ type: [HistoryResponseDto] })

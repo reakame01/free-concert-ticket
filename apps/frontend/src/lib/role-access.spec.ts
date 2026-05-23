@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getEffectiveAccessMode, isAdminOnlyPath } from './role-access';
+import { getEffectiveAccessMode, isAdminOnlyPath } from '@/lib/role-access';
 
 describe('getEffectiveAccessMode', () => {
   it('forces USER view when JWT role is not ADMIN', () => {

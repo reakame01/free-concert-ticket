@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { HistoryAction } from '@/common/enums/history-action.enum';
 import { formatDateTimeDisplay } from '@/common/utils/format-datetime';
-import { HistoryResponseDto } from './dto/history-response.dto';
-import { HistoryLog } from './entities/history-log.entity';
+import { HistoryResponseDto } from '@/history/dto/history-response.dto';
+import { HistoryLog } from '@/history/entities/history-log.entity';
 
 @Injectable()
 export class HistoryService {

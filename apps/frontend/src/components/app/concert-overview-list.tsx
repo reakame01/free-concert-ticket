@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useAppStore } from '@/context/app-store';
 import { useI18n } from '@/context/i18n-provider';
-import { ConcertCard } from './concert-card';
+import { ConcertCard } from '@/components/app/concert-card';
 
 interface ConcertOverviewListProps {
   mode: 'admin' | 'user';

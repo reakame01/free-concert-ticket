@@ -4,8 +4,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { HistoryAction } from '@/common/enums/history-action.enum';
 import { HistoryService } from '@/history/history.service';
-import { Concert } from './entities/concert.entity';
-import { ConcertsService } from './concerts.service';
+import { Concert } from '@/concerts/entities/concert.entity';
+import { ConcertsService } from '@/concerts/concerts.service';
 
 describe('ConcertsService', () => {
   let service: ConcertsService;

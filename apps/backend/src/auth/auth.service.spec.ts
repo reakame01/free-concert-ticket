@@ -8,7 +8,7 @@ import { Role } from '@/common/enums/role.enum';
 import { JwtPayload } from '@/common/interfaces/jwt-payload.interface';
 import { UsersService } from '@/users/users.service';
 import { User } from '@/users/entities/user.entity';
-import { AuthService } from './auth.service';
+import { AuthService } from '@/auth/auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;

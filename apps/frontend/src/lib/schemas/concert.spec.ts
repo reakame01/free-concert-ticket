@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { en } from '@/lib/i18n/locales/en';
-import { createConcertSchema } from './concert';
+import { createConcertSchema } from '@/lib/schemas/concert';
 
 const createConcertSchemaEn = createConcertSchema(en.validation.concert);
 

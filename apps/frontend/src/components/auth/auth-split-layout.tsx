@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { AuthBrandPanel } from './auth-brand-panel';
+import { AuthBrandPanel } from '@/components/auth/auth-brand-panel';
 
 interface AuthSplitLayoutProps {
   children: ReactNode;

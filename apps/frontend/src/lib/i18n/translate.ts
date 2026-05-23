@@ -1,11 +1,11 @@
-import { en } from './locales/en';
-import { th } from './locales/th';
+import { en } from '@/lib/i18n/locales/en';
+import { th } from '@/lib/i18n/locales/th';
 import {
   DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
   type Locale,
   type Messages,
-} from './types';
+} from '@/lib/i18n/types';
 
 const locales: Record<Locale, Messages> = { en, th: th as Messages };
 

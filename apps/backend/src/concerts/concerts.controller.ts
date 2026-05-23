@@ -18,14 +18,14 @@ import { Roles } from '@/common/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { RolesGuard } from '@/common/guards/roles.guard';
 import { AuthenticatedUser } from '@/common/interfaces/authenticated-user.interface';
-import { ConcertsService } from './concerts.service';
-import { CreateConcertDto } from './dto/create-concert.dto';
-import { ListConcertsQueryDto } from './dto/list-concerts-query.dto';
+import { ConcertsService } from '@/concerts/concerts.service';
+import { CreateConcertDto } from '@/concerts/dto/create-concert.dto';
+import { ListConcertsQueryDto } from '@/concerts/dto/list-concerts-query.dto';
 import {
   ConcertResponseDto,
   ConcertStatsResponseDto,
-} from './dto/concert-response.dto';
-import { PaginatedConcertsResponseDto } from './dto/paginated-concerts-response.dto';
+} from '@/concerts/dto/concert-response.dto';
+import { PaginatedConcertsResponseDto } from '@/concerts/dto/paginated-concerts-response.dto';
 
 @ApiTags('concerts')
 @ApiBearerAuth()

@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { AppStoreProvider } from '@/context/app-store';
 import { getAccessMode, setAccessMode } from '@/lib/access-mode';
 import { isAuthenticated } from '@/lib/auth';
-import { AccessGuard } from './access-guard';
-import { SideNav } from './side-nav';
+import { AccessGuard } from '@/components/app/access-guard';
+import { SideNav } from '@/components/app/side-nav';
 
 interface AppShellProps {
   children: ReactNode;

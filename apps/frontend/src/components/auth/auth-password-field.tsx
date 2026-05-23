@@ -3,7 +3,7 @@
 import { Eye, EyeOff, Lock } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 import type { InputHTMLAttributes } from 'react';
-import { AuthTextField } from './auth-text-field';
+import { AuthTextField } from '@/components/auth/auth-text-field';
 
 interface AuthPasswordFieldProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {

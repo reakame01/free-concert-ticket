@@ -12,13 +12,13 @@ import { Role } from '@/common/enums/role.enum';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { AuthenticatedUser } from '@/common/interfaces/authenticated-user.interface';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { AuthService } from '@/auth/auth.service';
+import { LoginDto } from '@/auth/dto/login.dto';
+import { RegisterDto } from '@/auth/dto/register.dto';
 import {
   LoginResponseDto,
   UserResponseDto,
-} from './dto/auth-response.dto';
+} from '@/auth/dto/auth-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')

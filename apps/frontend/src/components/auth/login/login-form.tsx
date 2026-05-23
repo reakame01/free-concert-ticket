@@ -21,11 +21,11 @@ import {
 } from '@/lib/schemas/auth';
 import { setToken } from '@/lib/auth';
 import type { AccessMode } from '@/types/access-mode';
-import { AuthActionButton } from '../auth-action-button';
-import { AuthFooterLink } from '../auth-footer-link';
-import { AuthFormHeading } from '../auth-form-heading';
-import { AuthPasswordField } from '../auth-password-field';
-import { AuthTextField } from '../auth-text-field';
+import { AuthActionButton } from '@/components/auth/auth-action-button';
+import { AuthFooterLink } from '@/components/auth/auth-footer-link';
+import { AuthFormHeading } from '@/components/auth/auth-form-heading';
+import { AuthPasswordField } from '@/components/auth/auth-password-field';
+import { AuthTextField } from '@/components/auth/auth-text-field';
 
 export const LoginForm = () => {
   const router = useRouter();

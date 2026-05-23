@@ -10,7 +10,7 @@ import { HistoryAction } from '@/common/enums/history-action.enum';
 import { ReservationStatus } from '@/common/enums/reservation-status.enum';
 import { Concert } from '@/concerts/entities/concert.entity';
 import { HistoryService } from '@/history/history.service';
-import { Reservation } from './entities/reservation.entity';
+import { Reservation } from '@/reservations/entities/reservation.entity';
 
 @Injectable()
 export class ReservationsService {

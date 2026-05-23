@@ -1,5 +1,5 @@
-import { AuthBrandContent } from './auth-brand-content';
-import { AuthLogo } from './auth-logo';
+import { AuthBrandContent } from '@/components/auth/auth-brand-content';
+import { AuthLogo } from '@/components/auth/auth-logo';
 
 export const AuthBrandPanel = () => {
   return (

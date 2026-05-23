@@ -9,9 +9,9 @@ import { JwtPayload } from '@/common/interfaces/jwt-payload.interface';
 import { AuthenticatedUser } from '@/common/interfaces/authenticated-user.interface';
 import { UsersService } from '@/users/users.service';
 import { User } from '@/users/entities/user.entity';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
-import { LoginResponseDto, UserResponseDto } from './dto/auth-response.dto';
+import { LoginDto } from '@/auth/dto/login.dto';
+import { RegisterDto } from '@/auth/dto/register.dto';
+import { LoginResponseDto, UserResponseDto } from '@/auth/dto/auth-response.dto';
 
 @Injectable()
 export class AuthService {

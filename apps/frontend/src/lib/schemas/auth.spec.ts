@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { en } from '@/lib/i18n/locales/en';
-import { createLoginSchema, createRegisterSchema } from './auth';
+import { createLoginSchema, createRegisterSchema } from '@/lib/schemas/auth';
 
 const loginSchema = createLoginSchema(en.validation.login);
 const registerSchema = createRegisterSchema(en.validation.register);

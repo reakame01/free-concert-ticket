@@ -16,7 +16,7 @@ import { Roles } from '@/common/decorators/roles.decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
 import { RolesGuard } from '@/common/guards/roles.guard';
 import { AuthenticatedUser } from '@/common/interfaces/authenticated-user.interface';
-import { ReservationsService } from './reservations.service';
+import { ReservationsService } from '@/reservations/reservations.service';
 
 @ApiTags('reservations')
 @ApiBearerAuth()

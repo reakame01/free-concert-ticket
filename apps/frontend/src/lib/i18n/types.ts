@@ -1,4 +1,4 @@
-import type { en } from './locales/en';
+import type { en } from '@/lib/i18n/locales/en';
 
 export type Locale = 'th' | 'en';
 

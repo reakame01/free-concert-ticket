@@ -63,13 +63,13 @@ npm run dev:db    # PostgreSQL เท่านั้น
 npm run dev       # Frontend :3000 + Backend :3001
 ```
 
-4. หรือใช้ Docker ทั้ง stack:
+4. Docker ทั้ง stack:
 
 ```bash
 docker-compose up
 ```
 
-5. หรือรันแยกโฟลเดอร์ (debug ทีละส่วน):
+รันแยกโฟลเดอร์ (debug ทีละส่วน):
 
 ```bash
 cd apps/backend && npm run start:dev

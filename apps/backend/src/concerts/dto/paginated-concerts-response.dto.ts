@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ConcertResponseDto } from './concert-response.dto';
+import { ConcertResponseDto } from '@/concerts/dto/concert-response.dto';
 
 export class PaginatedConcertsResponseDto {
   @ApiProperty({ type: [ConcertResponseDto] })

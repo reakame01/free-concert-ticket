@@ -1,4 +1,4 @@
-import { formatDateTimeDisplay } from './format-datetime';
+import { formatDateTimeDisplay } from '@/common/utils/format-datetime';
 
 describe('formatDateTimeDisplay', () => {
   it('formats date as DD/MM/YYYY HH:mm:ss', () => {
