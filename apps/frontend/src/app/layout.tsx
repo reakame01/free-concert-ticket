@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Noto_Sans_Thai } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
+import { RootProviders } from '@/components/providers/root-providers';
 import './globals.css';
 
 const notoSansThai = Noto_Sans_Thai({
@@ -26,12 +27,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th">
+    <html lang="en">
       <body
         className={`${notoSansThai.variable} ${inter.variable} font-sans antialiased`}
       >
-        {children}
-        <Toaster position="top-right" />
+        <RootProviders>{children}</RootProviders>
+        <Toaster
+          position="top-right"
+          containerStyle={{ top: 52, right: 16 }}
+          toastOptions={{ duration: 4000 }}
+        />
       </body>
     </html>
   );

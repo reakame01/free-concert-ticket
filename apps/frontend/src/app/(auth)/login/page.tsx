@@ -1,7 +1,10 @@
+import { AuthSplitLayout } from '@/components/auth/auth-split-layout';
+import { LoginForm } from '@/components/auth/login/login-form';
+
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center p-8">
-      <h1 className="text-3xl font-bold">Login</h1>
-    </main>
+    <AuthSplitLayout>
+      <LoginForm />
+    </AuthSplitLayout>
   );
 }
