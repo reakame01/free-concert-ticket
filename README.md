@@ -24,7 +24,7 @@ Full-stack concert ticket booking application using **Next.js** (frontend) + **N
 ├── package.json           ← root scripts (dev ทั้ง FE + BE)
 ├── docker-compose.yml
 ├── .env.example
-└── README.md
+└── README.md / README-Bonus.md
 ```
 
 ## Getting Started
