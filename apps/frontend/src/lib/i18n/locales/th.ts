@@ -5,6 +5,7 @@ export const th = {
     cancel: 'ยกเลิก',
     ok: 'ตกลง',
     processing: 'กำลังดำเนินการ...',
+    appLoading: 'กำลังโหลดแอปพลิเคชัน...',
     confirmation: 'ยืนยัน',
     yesConfirm: 'ใช่, ยืนยัน',
     yesDelete: 'ใช่, ลบ',

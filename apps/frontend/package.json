@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\" && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,7 +14,6 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.16.1",
-    "framer-motion": "^12.39.0",
     "lucide-react": "^1.16.0",
     "next": "14.2.35",
     "react": "^18",
@@ -26,6 +26,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8",

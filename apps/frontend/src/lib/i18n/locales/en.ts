@@ -5,6 +5,7 @@ export const en = {
     cancel: 'Cancel',
     ok: 'OK',
     processing: 'Processing...',
+    appLoading: 'Loading application...',
     confirmation: 'Confirmation',
     yesConfirm: 'Yes, Confirm',
     yesDelete: 'Yes, Delete',

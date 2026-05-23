@@ -7,6 +7,7 @@ import { getAccessMode, setAccessMode } from '@/lib/access-mode';
 import { isAuthenticated } from '@/lib/auth';
 import { AccessGuard } from '@/components/app/access-guard';
 import { SideNav } from '@/components/app/side-nav';
+import { AppLoader } from '@/components/ui/app-loader';
 
 interface AppShellProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ const AppShellInner = ({ children }: AppShellProps) => {
   }, [router]);
 
   if (!isAuthenticated()) {
-    return null;
+    return <AppLoader fullScreen message="Loading application..." />;
   }
 
   return (
